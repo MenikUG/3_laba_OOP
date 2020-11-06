@@ -1,4 +1,4 @@
 ﻿  3_laba_OOP.cpp
-D:\Projects\3_laba_OOP\3_laba_OOP\3_laba_OOP.cpp(149,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
-D:\Projects\3_laba_OOP\3_laba_OOP\3_laba_OOP.cpp(143): warning C4715: random_object: значение возвращается не при всех путях выполнения
+D:\Projects\3_laba_OOP\3_laba_OOP\3_laba_OOP.cpp(173,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+D:\Projects\3_laba_OOP\3_laba_OOP\3_laba_OOP.cpp(154): warning C4715: random_object: значение возвращается не при всех путях выполнения
   3_laba_OOP.vcxproj -> D:\Projects\3_laba_OOP\Debug\3_laba_OOP.exe

@@ -91,11 +91,10 @@ public:
 };
 
 class Storage {
-private:
+public:
     Human** objects;
     int count_occupied;
 
-public:
     Storage()
     {
     }
@@ -108,11 +107,13 @@ public:
 
     void add_object(int index, Human* object) {
         objects[index] = object;
+        ++count_occupied;
     }
 
     void delete_object(int index) {
         delete objects[index];
         objects[index] = NULL;
+        --count_occupied;
     }
 
     void method(int index) {
@@ -134,6 +135,13 @@ public:
         }
     }
 
+    int occupied() {
+        return count_occupied;
+    }
+
+    ~Storage() {
+        
+    }
 };
 
 Human* random_object(int variant) {
@@ -145,13 +153,26 @@ Human* random_object(int variant) {
     }
 }
 
+void doubleSize(Storage &storage, int size, Storage &storage1)
+{    
+    storage1.initialisat(size * 2);
+    for (int i = 0; i < size; ++i)
+        storage1.objects[i] = storage.objects[i];
+    for (int i = size; i < (size * 2) - 1; ++i) {
+        storage1.objects[i] = NULL;
+    }   
+}
+
+
+
 int main()
 {
     setlocale(0, "");
     Storage storage;
+    Storage storage1;
     srand(time(0));
     string text = " ";
-    int n = 1000; // Кол-во операций
+    int n = 20; // Кол-во операций
     int count = 10; // Кол-во элементов
     storage.initialisat(count);
     unsigned int start_time = clock();
@@ -193,12 +214,21 @@ int main()
     unsigned int end_time = clock();
     unsigned int search_time = end_time - start_time;
     cout << "\n" <<"Время работы = " << clock() / 1000.0 << endl;
-
-    system("pause");
-    cout << "\n\n" <<"Вы хотите посмотреть всё хранилище? 1 - Да, 2 - Нет ";
+    cout << "Общее кол-во занятых ячеек хранилища = " << storage.occupied() <<  endl;
+   // system("pause");
+    cout << "\n\n" <<"Вы хотите посмотреть всё хранилище? 1 - Да, 2 - Нет : ";
     int a;
     cin >> a;
     if (a == 1) {
         storage.appeal_all(count);
     }
+
+    doubleSize(storage, count, storage1);
+
+    count = count * 2;
+    storage.initialisat(count);
+
+    cout << "\n\n\n\n";
+
+    storage1.appeal_all(count);
 }

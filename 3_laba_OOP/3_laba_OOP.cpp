@@ -93,14 +93,16 @@ public:
 class Storage {
 private:
     Human** objects;
+    int count_occupied;
+
 public:
     Storage()
     {
     }
     
-    void initialisat(int size) {
-        objects = new Human* [size];
-        for (int i = 0; i < size; ++i) 
+    void initialisat(int count) {
+        objects = new Human* [count];
+        for (int i = 0; i < count; ++i)
             objects[i] = NULL;
     }
 
@@ -123,9 +125,15 @@ public:
         else return false;
     }
 
-    Human& GetObject(int index) {
-        return *objects[index];
+    void appeal_all(int n) {
+        for (int i = 0; i < n; ++i) {
+            printf("[%d] место ", i);
+            if (check_empty(i))
+                printf("Пустое\n");
+            else method(i);
+        }
     }
+
 };
 
 Human* random_object(int variant) {
@@ -143,18 +151,18 @@ int main()
     Storage storage;
     srand(time(0));
     string text = " ";
-    int n = 30; // Кол-во операций
-    int size = 5; // Кол-во элементов
-    storage.initialisat(size);
+    int n = 1000; // Кол-во операций
+    int count = 10; // Кол-во элементов
+    storage.initialisat(count);
     unsigned int start_time = clock();
     for (int i = 0; i < n; ++i) {         
-        int act = rand() % size; // Выбираем с каким объектом взаимодействуем
+        int act = rand() % count; // Выбираем с каким объектом взаимодействуем
         int vibor = 1 + rand() % 3; // Выбираем какое действие произойдёт с выбранным объектом
         int k = 1 + rand() % 2;
         printf("[%d]", i);
         switch (vibor) {
         case 1:  
-            if (storage.check_empty(act)) {
+            if (storage.check_empty(act)) { // Если место свободно, то добавляем объект
                 if (k == 1) {
                     text = "Student";
                 }
@@ -165,14 +173,14 @@ int main()
             else printf("  [%i] место хранилища занято, добавить объект невозможно\n", act);
             break;
         case 2:
-            if (!storage.check_empty(act)) {
+            if (!storage.check_empty(act)) { // Если место занято, то удаляем объект
                 printf("  Освободили [%i] место хранилища\n", act);
                 storage.delete_object(act);
             }
             else printf("  [%i] место хранилища пустое, освободить место в хранилище невозможно\n", act);
             break;
         case 3:
-            if (!storage.check_empty(act)) {
+            if (!storage.check_empty(act)) { // Если место занято, то вызываем метод у объекта
                 printf("  Запуск метода about_me() у [%i] объекта из хранилища\n", act);
                 storage.method(act);
             }
@@ -180,10 +188,17 @@ int main()
             break;
         }           
     }
-    //storage.add_object(1, random_object(1));
-    //storage.method(1);
 
-        unsigned int end_time = clock();
-        unsigned int search_time = end_time - start_time;
-        cout << "runtime = " << clock() / 1000.0 << endl;
+
+    unsigned int end_time = clock();
+    unsigned int search_time = end_time - start_time;
+    cout << "\n" <<"Время работы = " << clock() / 1000.0 << endl;
+
+    system("pause");
+    cout << "\n\n" <<"Вы хотите посмотреть всё хранилище? 1 - Да, 2 - Нет ";
+    int a;
+    cin >> a;
+    if (a == 1) {
+        storage.appeal_all(count);
+    }
 }

@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <string>
+#include <ctime>
 
 using namespace std;
 
@@ -89,13 +90,100 @@ public:
     }
 };
 
+class Storage {
+private:
+    Human** objects;
+public:
+    Storage()
+    {
+    }
+    
+    void initialisat(int size) {
+        objects = new Human* [size];
+        for (int i = 0; i < size; ++i) 
+            objects[i] = NULL;
+    }
+
+    void add_object(int index, Human* object) {
+        objects[index] = object;
+    }
+
+    void delete_object(int index) {
+        delete objects[index];
+        objects[index] = NULL;
+    }
+
+    void method(int index) {
+        objects[index]->about_me();
+    }
+
+    bool check_empty(int index) {
+        if (objects[index] == NULL) 
+            return true;
+        else return false;
+    }
+
+    Human& GetObject(int index) {
+        return *objects[index];
+    }
+};
+
+Human* random_object(int variant) {
+    switch (variant) {
+    case 1:
+        return new Student;
+    case 2:
+        return new Teacher;
+    }
+}
+
 int main()
 {
     setlocale(0, "");
-    Human ra;
-    Student re;
-    Teacher rs;
-    ra.about_me();
-    re.about_me();
-    rs.about_me();
+    Storage storage;
+    srand(time(0));
+    string text = " ";
+    int n = 30; // Кол-во операций
+    int size = 5; // Кол-во элементов
+    storage.initialisat(size);
+    unsigned int start_time = clock();
+    for (int i = 0; i < n; ++i) {         
+        int act = rand() % size; // Выбираем с каким объектом взаимодействуем
+        int vibor = 1 + rand() % 3; // Выбираем какое действие произойдёт с выбранным объектом
+        int k = 1 + rand() % 2;
+        printf("[%d]", i);
+        switch (vibor) {
+        case 1:  
+            if (storage.check_empty(act)) {
+                if (k == 1) {
+                    text = "Student";
+                }
+                else text = "Teacher";
+                printf("  Добавили в [%i] место хранилища объект класса %s\n", act, text.c_str());
+                storage.add_object(act, random_object(k));
+            }
+            else printf("  [%i] место хранилища занято, добавить объект невозможно\n", act);
+            break;
+        case 2:
+            if (!storage.check_empty(act)) {
+                printf("  Освободили [%i] место хранилища\n", act);
+                storage.delete_object(act);
+            }
+            else printf("  [%i] место хранилища пустое, освободить место в хранилище невозможно\n", act);
+            break;
+        case 3:
+            if (!storage.check_empty(act)) {
+                printf("  Запуск метода about_me() у [%i] объекта из хранилища\n", act);
+                storage.method(act);
+            }
+            else printf("  [%i] место хранилища пустое, вызвать метод невозможно\n", act);
+            break;
+        }           
+    }
+    //storage.add_object(1, random_object(1));
+    //storage.method(1);
+
+        unsigned int end_time = clock();
+        unsigned int search_time = end_time - start_time;
+        cout << "runtime = " << clock() / 1000.0 << endl;
 }

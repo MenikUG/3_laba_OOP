@@ -93,11 +93,8 @@ public:
 class Storage {
 public:
     Human** objects;
-    int count_occupied;
-
     Storage()
-    {
-    }
+    { }
     
     void initialisat(int count) {
         objects = new Human* [count];
@@ -107,13 +104,11 @@ public:
 
     void add_object(int index, Human* object) {
         objects[index] = object;
-        ++count_occupied;
     }
 
     void delete_object(int index) {
         delete objects[index];
         objects[index] = NULL;
-        --count_occupied;
     }
 
     void method(int index) {
@@ -135,7 +130,11 @@ public:
         }
     }
 
-    int occupied() {
+    int occupied(int size) {
+        int count_occupied = 0;
+        for (int i = 0; i < size; ++i)
+            if (!check_empty(i))
+                ++count_occupied;
         return count_occupied;
     }
 
@@ -153,26 +152,29 @@ Human* random_object(int variant) {
     }
 }
 
-void doubleSize(Storage &storage, int size, Storage &storage1)
-{    
+void doubleSize(Storage &storage, int &size)
+{   // Функция для увеличения кол-ва элементов в хранилище в 2 раза 
+    Storage storage1;
     storage1.initialisat(size * 2);
     for (int i = 0; i < size; ++i)
         storage1.objects[i] = storage.objects[i];
     for (int i = size; i < (size * 2) - 1; ++i) {
         storage1.objects[i] = NULL;
     }   
+    size = size * 2;
+    storage.initialisat(size);
+    for (int i = 0; i < size; ++i)
+        storage.objects[i] = storage1.objects[i];
 }
-
 
 
 int main()
 {
     setlocale(0, "");
     Storage storage;
-    Storage storage1;
     srand(time(0));
     string text = " ";
-    int n = 20; // Кол-во операций
+    int n = 1000; // Кол-во операций
     int count = 10; // Кол-во элементов
     storage.initialisat(count);
     unsigned int start_time = clock();
@@ -191,7 +193,11 @@ int main()
                 printf("  Добавили в [%i] место хранилища объект класса %s\n", act, text.c_str());
                 storage.add_object(act, random_object(k));
             }
-            else printf("  [%i] место хранилища занято, добавить объект невозможно\n", act);
+            else 
+            {                              
+                printf("  [%i] место хранилища занято, добавить объект невозможно\n", act);
+
+            }
             break;
         case 2:
             if (!storage.check_empty(act)) { // Если место занято, то удаляем объект
@@ -210,25 +216,21 @@ int main()
         }           
     }
 
-
     unsigned int end_time = clock();
     unsigned int search_time = end_time - start_time;
     cout << "\n" <<"Время работы = " << clock() / 1000.0 << endl;
-    cout << "Общее кол-во занятых ячеек хранилища = " << storage.occupied() <<  endl;
-   // system("pause");
-    cout << "\n\n" <<"Вы хотите посмотреть всё хранилище? 1 - Да, 2 - Нет : ";
+    cout << "Общее кол-во занятых ячеек хранилища = " << storage.occupied(count) <<  endl;
+    cout << "\n" <<"Вы хотите посмотреть всё хранилище? 1 - Да, 2 - Нет : ";
     int a;
     cin >> a;
     if (a == 1) {
         storage.appeal_all(count);
     }
 
-    doubleSize(storage, count, storage1);
+    doubleSize(storage, count);
 
-    count = count * 2;
-    storage.initialisat(count);
+    cout << "\n";
 
-    cout << "\n\n\n\n";
-
-    storage1.appeal_all(count);
+    storage.appeal_all(count);
+    cout << "Общее кол-во занятых ячеек хранилища = " << storage.occupied(count) << endl;
 }

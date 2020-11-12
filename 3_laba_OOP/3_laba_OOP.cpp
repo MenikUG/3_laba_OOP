@@ -138,6 +138,8 @@ public:
         return count_occupied;
     }
 
+
+
     ~Storage() {
         
     }
@@ -174,9 +176,10 @@ int main()
     Storage storage;
     srand(time(0));
     string text = " ";
-    int n = 1000; // Кол-во операций
+    int n = 50; // Кол-во операций
     int count = 10; // Кол-во элементов
     storage.initialisat(count);
+
     unsigned int start_time = clock();
     for (int i = 0; i < n; ++i) {         
         int act = rand() % count; // Выбираем с каким объектом взаимодействуем
@@ -185,6 +188,7 @@ int main()
         printf("[%d]", i);
         switch (vibor) {
         case 1:  
+        again_add:
             if (storage.check_empty(act)) { // Если место свободно, то добавляем объект
                 if (k == 1) {
                     text = "Student";
@@ -195,8 +199,15 @@ int main()
             }
             else 
             {                              
-                printf("  [%i] место хранилища занято, добавить объект невозможно\n", act);
-
+                if (storage.occupied(count) == count) 
+                {
+                    printf("  Хранилище полностью заполнено, увеличиваем кол-во элементов в хранилище в 2 раза\n");
+                    doubleSize(storage, count);
+                }
+                printf("  [%i] место хранилища занято, ищем свободное место в хранилище\n", act);
+                while (storage.objects[act] != NULL)
+                    act = (act + 1) % count;
+                goto again_add;
             }
             break;
         case 2:
@@ -226,11 +237,6 @@ int main()
     if (a == 1) {
         storage.appeal_all(count);
     }
-
-    doubleSize(storage, count);
-
     cout << "\n";
-
-    storage.appeal_all(count);
     cout << "Общее кол-во занятых ячеек хранилища = " << storage.occupied(count) << endl;
 }

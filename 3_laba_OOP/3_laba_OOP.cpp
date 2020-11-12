@@ -93,8 +93,7 @@ public:
 class Storage {
 public:
     Human** objects;
-    Storage()
-    { }
+    Storage()  { }
     
     void initialisat(int count) {
         objects = new Human* [count];
@@ -138,8 +137,6 @@ public:
         return count_occupied;
     }
 
-
-
     ~Storage() {
         
     }
@@ -176,16 +173,17 @@ int main()
     Storage storage;
     srand(time(0));
     string text = " ";
-    int n = 50; // Кол-во операций
+    int n = 100; // Кол-во операций
     int count = 10; // Кол-во элементов
     storage.initialisat(count);
 
+again:
     unsigned int start_time = clock();
     for (int i = 0; i < n; ++i) {         
         int act = rand() % count; // Выбираем с каким объектом взаимодействуем
         int vibor = 1 + rand() % 3; // Выбираем какое действие произойдёт с выбранным объектом
         int k = 1 + rand() % 2;
-        printf("[%d]", i);
+        printf("[%d]", i + 1);
         switch (vibor) {
         case 1:  
         again_add:
@@ -229,7 +227,7 @@ int main()
 
     unsigned int end_time = clock();
     unsigned int search_time = end_time - start_time;
-    cout << "\n" <<"Время работы = " << clock() / 1000.0 << endl;
+    cout << "\n" <<"Время работы = " << clock() / 1000.0 << "сек" << endl;
     cout << "Общее кол-во занятых ячеек хранилища = " << storage.occupied(count) <<  endl;
     cout << "\n" <<"Вы хотите посмотреть всё хранилище? 1 - Да, 2 - Нет : ";
     int a;
@@ -237,6 +235,7 @@ int main()
     if (a == 1) {
         storage.appeal_all(count);
     }
-    cout << "\n";
-    cout << "Общее кол-во занятых ячеек хранилища = " << storage.occupied(count) << endl;
+    cout << "Напишите сколько случайных операций выполнить : ";
+    cin >> n;
+    goto again;
 }

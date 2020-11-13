@@ -1,0 +1,8 @@
+﻿  3_laba_OOP.cpp
+D:\Projects\3_laba_OOP\3_laba_OOP\3_laba_OOP.cpp(174,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+  Создание кода
+  1 of 104 functions ( 1.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Создание кода завершено
+  3_laba_OOP.vcxproj -> D:\Projects\3_laba_OOP\Release\3_laba_OOP.exe

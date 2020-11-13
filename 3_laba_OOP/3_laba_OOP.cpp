@@ -178,6 +178,7 @@ int main()
     storage.initialisat(count);
 
 again:
+
     unsigned int start_time = clock();
     for (int i = 0; i < n; ++i) {         
         int act = rand() % count; // Выбираем с каким объектом взаимодействуем
@@ -227,7 +228,7 @@ again:
 
     unsigned int end_time = clock();
     unsigned int search_time = end_time - start_time;
-    cout << "\n" <<"Время работы = " << clock() / 1000.0 << "сек" << endl;
+    cout << "\n" <<"Время работы = " << search_time/ 1000.0 << "сек" << endl;
     cout << "Общее кол-во занятых ячеек хранилища = " << storage.occupied(count) <<  endl;
     cout << "\n" <<"Вы хотите посмотреть всё хранилище? 1 - Да, 2 - Нет : ";
     int a;

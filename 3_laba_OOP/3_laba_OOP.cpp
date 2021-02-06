@@ -91,9 +91,14 @@ public:
 };
 
 class Storage {
-public:
+protected:
     Human** objects;
+public:
     Storage()  { }
+
+    Human* get(int index) {
+        return objects[index];
+    }
     
     void initialisat(int count) {
         objects = new Human* [count];
@@ -137,6 +142,20 @@ public:
         return count_occupied;
     }
 
+    void doubleSize(int& size) {
+        Storage storage1;
+        storage1.initialisat(size * 2);
+        for (int i = 0; i < size; ++i)
+            storage1.objects[i] = objects[i];
+        for (int i = size; i < (size * 2) - 1; ++i) {
+            storage1.objects[i] = NULL;
+        }
+        size = size * 2;
+        initialisat(size);
+        for (int i = 0; i < size; ++i)
+            objects[i] = storage1.objects[i];
+    }
+
     ~Storage() {
         
     }
@@ -151,22 +170,6 @@ Human* random_object(int variant) {
     }
 }
 
-void doubleSize(Storage &storage, int &size)
-{   // Функция для увеличения кол-ва элементов в хранилище в 2 раза 
-    Storage storage1;
-    storage1.initialisat(size * 2);
-    for (int i = 0; i < size; ++i)
-        storage1.objects[i] = storage.objects[i];
-    for (int i = size; i < (size * 2) - 1; ++i) {
-        storage1.objects[i] = NULL;
-    }   
-    size = size * 2;
-    storage.initialisat(size);
-    for (int i = 0; i < size; ++i)
-        storage.objects[i] = storage1.objects[i];
-}
-
-
 int main()
 {
     setlocale(0, "");
@@ -178,7 +181,6 @@ int main()
     storage.initialisat(count);
 
 again:
-
     unsigned int start_time = clock();
     for (int i = 0; i < n; ++i) {         
         int act = rand() % count; // Выбираем с каким объектом взаимодействуем
@@ -201,10 +203,10 @@ again:
                 if (storage.occupied(count) == count) 
                 {
                     printf("  Хранилище полностью заполнено, увеличиваем кол-во элементов в хранилище в 2 раза\n");
-                    doubleSize(storage, count);
+                    storage.doubleSize(count);
                 }
                 printf("  [%i] место хранилища занято, ищем свободное место в хранилище\n", act);
-                while (storage.objects[act] != NULL)
+                while (storage.get(act) != NULL)
                     act = (act + 1) % count;
                 goto again_add;
             }
